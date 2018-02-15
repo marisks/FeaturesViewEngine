@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace FeaturesViewEngine
 {
@@ -11,34 +14,14 @@ namespace FeaturesViewEngine
     {
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
-            return base.FindView(controllerContext, viewName, masterName, false);
+            var resolved = ResolveViewPath(controllerContext, viewName, ViewLocationFormats);
+            return base.FindView(controllerContext, resolved, masterName, useCache);
         }
 
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
-            return base.FindPartialView(controllerContext, partialViewName, false);
-        }
-
-        protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
-        {
-            return base.CreateView(
-                controllerContext,
-                viewPath.Replace(FeaturePlaceholder, ResolveFeaturePath(controllerContext)),
-                masterPath.Replace(FeaturePlaceholder, ResolveFeaturePath(controllerContext)));
-        }
-
-        protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath)
-        {
-            return base.CreatePartialView(
-                controllerContext,
-                partialPath.Replace(FeaturePlaceholder, ResolveFeaturePath(controllerContext)));
-        }
-
-        protected override bool FileExists(ControllerContext controllerContext, string virtualPath)
-        {
-            return base.FileExists(
-                controllerContext,
-                virtualPath.Replace(FeaturePlaceholder, ResolveFeaturePath(controllerContext)));
+            var resolved = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats);
+            return base.FindPartialView(controllerContext, resolved, useCache);
         }
 
         public static string FeaturePlaceholder = "%feature%";
@@ -54,6 +37,18 @@ namespace FeaturesViewEngine
             return fullNamespace != null ? controllerType.Assembly.GetName().Name : string.Empty;
         }
 
+        private string ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        {
+            var featurePath = ResolveFeaturePath(controllerContext);
+            if (string.IsNullOrEmpty(featurePath)) return viewName;
+            string controllerName = controllerContext.RouteData.GetRequiredString("controller");
+            return formats
+                .Select(path => FormatViewPath(path, featurePath, viewName, controllerName))
+                .Where(viewPath => FileExists(controllerContext, viewPath))
+                .DefaultIfEmpty(viewName)
+                .First();
+        }
+
         private string ResolveFeaturePath(ControllerContext controllerContext)
         {
             if (controllerContext.Controller == null) return string.Empty;
@@ -62,6 +57,12 @@ namespace FeaturesViewEngine
             if (fullNamespace == null) return string.Empty;
             var prefixToRemove = NamespacePrefixToRemove(controllerContext);
             return $"~{fullNamespace.Replace(prefixToRemove, string.Empty).Replace(".", "/")}";
+        }
+
+        private static string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
+        {
+            var format = formatString.Replace(FeaturePlaceholder, featurePath);
+            return string.Format(CultureInfo.InvariantCulture, format, viewName, controllerName);
         }
     }
 }
