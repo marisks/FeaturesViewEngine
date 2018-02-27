@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyProductAttribute("FeaturesViewEngine")]
-[assembly: AssemblyVersionAttribute("1.0.0")]
-[assembly: AssemblyFileVersionAttribute("1.0.0")]
+[assembly: AssemblyVersionAttribute("1.1.0")]
+[assembly: AssemblyFileVersionAttribute("1.1.0")]
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyCopyrightAttribute("Copyright © Maris Krivtezs 2017")]
 [assembly: AssemblyCompanyAttribute("Maris Krivtezs")]
@@ -13,8 +13,8 @@ using System.Runtime.InteropServices;
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyProduct = "FeaturesViewEngine";
-        internal const System.String AssemblyVersion = "1.0.0";
-        internal const System.String AssemblyFileVersion = "1.0.0";
+        internal const System.String AssemblyVersion = "1.1.0";
+        internal const System.String AssemblyFileVersion = "1.1.0";
         internal const System.Boolean ComVisible = false;
         internal const System.String AssemblyCopyright = "Copyright © Maris Krivtezs 2017";
         internal const System.String AssemblyCompany = "Maris Krivtezs";

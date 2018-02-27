@@ -8,8 +8,8 @@ let projectName = "FeaturesViewEngine"
 let projectDescription = "View Engine which enables feature folder support for MVC (prior .NET Core)."
 let projectSummary = projectDescription
 let releaseNotes = "Initial release"
-let copyright = "Copyright © Maris Krivtezs 2017"
-let assemblyVersion = "1.0.0"
+let copyright = "Copyright © Maris Krivtezs 2018"
+let assemblyVersion = "1.1.0"
 
 let solutionPath = "../../FeaturesViewEngine.sln"
 let buildDir = "../FeaturesViewEngine/bin"
