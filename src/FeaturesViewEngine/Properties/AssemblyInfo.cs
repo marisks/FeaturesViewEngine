@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersionAttribute("1.1.0")]
 [assembly: AssemblyFileVersionAttribute("1.1.0")]
 [assembly: ComVisibleAttribute(false)]
-[assembly: AssemblyCopyrightAttribute("Copyright © Maris Krivtezs 2017")]
+[assembly: AssemblyCopyrightAttribute("Copyright © Maris Krivtezs 2018")]
 [assembly: AssemblyCompanyAttribute("Maris Krivtezs")]
 [assembly: AssemblyDescriptionAttribute("View Engine which enables feature folder support for MVC (prior .NET Core).")]
 [assembly: AssemblyTitleAttribute("FeaturesViewEngine")]
@@ -16,7 +16,7 @@ namespace System {
         internal const System.String AssemblyVersion = "1.1.0";
         internal const System.String AssemblyFileVersion = "1.1.0";
         internal const System.Boolean ComVisible = false;
-        internal const System.String AssemblyCopyright = "Copyright © Maris Krivtezs 2017";
+        internal const System.String AssemblyCopyright = "Copyright © Maris Krivtezs 2018";
         internal const System.String AssemblyCompany = "Maris Krivtezs";
         internal const System.String AssemblyDescription = "View Engine which enables feature folder support for MVC (prior .NET Core).";
         internal const System.String AssemblyTitle = "FeaturesViewEngine";
