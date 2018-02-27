@@ -12,15 +12,26 @@ namespace FeaturesViewEngine
     /// </summary>
     public abstract class ControllerFeaturesViewEngine : RazorViewEngine
     {
+        // format is ":FeatureViewCacheEntry:{cacheType}:{featurePath}:{viewName}:{controllerName}:"
+        private const string CacheKeyFormat = ":FeatureViewCacheEntry:{0}:{1}:{2}:{3}:";
+
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
-            var resolved = ResolveViewPath(controllerContext, viewName, ViewLocationFormats);
+            var (resolved, searchLocations) = ResolveViewPath(controllerContext, viewName, ViewLocationFormats, useCache);
+            if (string.IsNullOrEmpty(resolved))
+            {
+                return new ViewEngineResult(searchLocations);
+            }
             return base.FindView(controllerContext, resolved, masterName, useCache);
         }
 
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
-            var resolved = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats);
+            var (resolved, searchLocations) = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats, useCache);
+            if (string.IsNullOrEmpty(resolved))
+            {
+                return new ViewEngineResult(searchLocations);
+            }
             return base.FindPartialView(controllerContext, resolved, useCache);
         }
 
@@ -37,19 +48,52 @@ namespace FeaturesViewEngine
             return fullNamespace != null ? controllerType.Assembly.GetName().Name : string.Empty;
         }
 
-        private string ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        private (string resolved, string[] searchLocations) ResolveViewPath(
+            ControllerContext controllerContext,
+            string viewName,
+            IEnumerable<string> formats,
+            bool useCache)
         {
-            var featurePath = ResolveFeaturePath(controllerContext);
-            if (string.IsNullOrEmpty(featurePath)) return viewName;
-            string controllerName = controllerContext.RouteData.GetRequiredString("controller");
-            return formats
-                .Select(path => FormatViewPath(path, featurePath, viewName, controllerName))
-                .Where(viewPath => FileExists(controllerContext, viewPath))
-                .DefaultIfEmpty(viewName)
-                .First();
+            var featurePath = GetFeaturePath(controllerContext);
+            var controllerName = GetControllerName(controllerContext);
+            var cacheKey = CreateCacheKey(featurePath, viewName, controllerName);
+
+            if (useCache)
+            {
+                var cachedLocation = ViewLocationCache.GetViewLocation(controllerContext.HttpContext, cacheKey);
+                if (cachedLocation != null) return (cachedLocation, new string[0]);
+            }
+
+            var (location, searchLocations) = ResolveViewPath(controllerContext, viewName, formats);
+            ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, location);
+            return (location, searchLocations);
         }
 
-        private string ResolveFeaturePath(ControllerContext controllerContext)
+        private string CreateCacheKey(string featurePath, string viewName, string controllerName)
+        {
+            return string.Format(CultureInfo.InvariantCulture, CacheKeyFormat,
+                GetType().AssemblyQualifiedName, featurePath, viewName, controllerName);
+        }
+
+        private (string resolved, string[] searchLocations) ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        {
+            if (IsSpecificPath(viewName)) return (viewName, new string[0]);
+            var featurePath = GetFeaturePath(controllerContext);
+            if (string.IsNullOrEmpty(featurePath)) return (null, new string[0]);
+            var controllerName = GetControllerName(controllerContext);
+            var searchLocations = formats
+                .Select(path => FormatViewPath(path, featurePath, viewName, controllerName))
+                .ToArray();
+            var resolved = searchLocations.FirstOrDefault(viewPath => FileExists(controllerContext, viewPath));
+            return (resolved, searchLocations);
+        }
+
+        private static string GetControllerName(ControllerContext controllerContext)
+        {
+            return controllerContext.RouteData.GetRequiredString("controller");
+        }
+
+        private string GetFeaturePath(ControllerContext controllerContext)
         {
             if (controllerContext.Controller == null) return string.Empty;
             var controllerType = controllerContext.Controller.GetType();
@@ -63,6 +107,12 @@ namespace FeaturesViewEngine
         {
             var format = formatString.Replace(FeaturePlaceholder, featurePath);
             return string.Format(CultureInfo.InvariantCulture, format, viewName, controllerName);
+        }
+
+        private static bool IsSpecificPath(string name)
+        {
+            var c = name[0];
+            return c == '~' || c == '/';
         }
     }
 }
