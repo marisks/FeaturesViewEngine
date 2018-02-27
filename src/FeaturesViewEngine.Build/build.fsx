@@ -1,4 +1,4 @@
-﻿#r @"../../packages/FAKE.4.63.2/tools/FakeLib.dll"
+﻿#r @"../../packages/FAKE.4.64.6/tools/FakeLib.dll"
 
 open Fake
 
@@ -23,7 +23,6 @@ let PackageDependency packageName =
 
 MSBuildDefaults <- {
     MSBuildDefaults with
-        ToolsVersion = Some "14.0"
         Verbosity = Some MSBuildVerbosity.Minimal }
 
 Target "Clean" (fun _ ->
@@ -48,7 +47,6 @@ let buildMode = getBuildParamOrDefault "buildMode" "Release"
 
 let setParams defaults = {
     defaults with
-        ToolsVersion = Some("14.0")
         Targets = ["Build"]
         Properties =
             [
