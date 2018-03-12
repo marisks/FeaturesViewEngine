@@ -7,9 +7,9 @@ let authors = [company]
 let projectName = "FeaturesViewEngine"
 let projectDescription = "View Engine which enables feature folder support for MVC (prior .NET Core)."
 let projectSummary = projectDescription
-let releaseNotes = "Fixed caching issue when view is not resolved, added possibility to override path formatting."
+let releaseNotes = "Fix for exception when namespace prefix not found."
 let copyright = "Copyright © Maris Krivtezs 2018"
-let assemblyVersion = "1.1.1"
+let assemblyVersion = "1.1.2"
 
 let solutionPath = "../../FeaturesViewEngine.sln"
 let buildDir = "../FeaturesViewEngine/bin"
