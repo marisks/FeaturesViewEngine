@@ -103,7 +103,9 @@ namespace FeaturesViewEngine
             var fullNamespace = controllerType.Namespace;
             if (fullNamespace == null) return string.Empty;
             var prefixToRemove = NamespacePrefixToRemove(controllerContext);
-            return $"~{fullNamespace.Replace(prefixToRemove, string.Empty).Replace(".", "/")}";
+            return fullNamespace.StartsWith(prefixToRemove)
+                ? $"~{fullNamespace.Replace(prefixToRemove, string.Empty).Replace(".", "/")}"
+                : string.Empty;
         }
 
         protected virtual string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
