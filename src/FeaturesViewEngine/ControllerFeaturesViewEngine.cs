@@ -65,7 +65,10 @@ namespace FeaturesViewEngine
             }
 
             var (location, searchLocations) = ResolveViewPath(controllerContext, viewName, formats);
-            ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, location);
+            if (!string.IsNullOrEmpty(location))
+            {
+                ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, location);
+            }
             return (location, searchLocations);
         }
 
