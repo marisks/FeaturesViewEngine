@@ -103,7 +103,7 @@ namespace FeaturesViewEngine
             return $"~{fullNamespace.Replace(prefixToRemove, string.Empty).Replace(".", "/")}";
         }
 
-        private static string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
+        protected virtual string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
         {
             var format = formatString.Replace(FeaturePlaceholder, featurePath);
             return string.Format(CultureInfo.InvariantCulture, format, viewName, controllerName);
