@@ -7,7 +7,7 @@ let authors = [company]
 let projectName = "FeaturesViewEngine"
 let projectDescription = "View Engine which enables feature folder support for MVC (prior .NET Core)."
 let projectSummary = projectDescription
-let releaseNotes = "Fix for exception when namespace prefix not found."
+let releaseNotes = "Removed base view paths."
 let copyright = "Copyright © Maris Krivtezs 2018"
 let assemblyVersion = "1.1.3"
 
