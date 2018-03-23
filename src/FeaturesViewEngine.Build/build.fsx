@@ -9,7 +9,7 @@ let projectDescription = "View Engine which enables feature folder support for M
 let projectSummary = projectDescription
 let releaseNotes = "Fix for exception when namespace prefix not found."
 let copyright = "Copyright © Maris Krivtezs 2018"
-let assemblyVersion = "1.1.2"
+let assemblyVersion = "1.1.3"
 
 let solutionPath = "../../FeaturesViewEngine.sln"
 let buildDir = "../FeaturesViewEngine/bin"
