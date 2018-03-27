@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace FeaturesViewEngine
+﻿namespace FeaturesViewEngine
 {
     public sealed class DefaultControllerFeaturesViewEngine : ControllerFeaturesViewEngine
     {
