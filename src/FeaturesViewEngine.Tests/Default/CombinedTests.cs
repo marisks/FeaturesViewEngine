@@ -18,7 +18,9 @@ namespace FeaturesViewEngine.Tests.Default
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/Default/IndexWithLayoutWithPartialByName");
-                    response.Should().MatchEquivalentOf("*~/Views/Shared/_Layout.cshtml*~/Views/Default/IndexWithPartialByName.cshtml*~/Views/Shared/Partial.cshtml");
+                    response.Should()
+                        .MatchEquivalentOf(
+                            "*~/Views/Shared/_Layout.cshtml*~/Views/Default/IndexWithPartialByName.cshtml*~/Views/Shared/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -29,7 +31,9 @@ namespace FeaturesViewEngine.Tests.Default
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/Default/IndexWithLayoutWithPartialBySpecificName");
-                    response.Should().MatchEquivalentOf("*~/Views/Shared/_Layout.cshtml*~/Views/Default/IndexWithPartialBySpecificName.cshtml*~/Views/Shared/Partial.cshtml");
+                    response.Should()
+                        .MatchEquivalentOf(
+                            "*~/Views/Shared/_Layout.cshtml*~/Views/Default/IndexWithPartialBySpecificName.cshtml*~/Views/Shared/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }

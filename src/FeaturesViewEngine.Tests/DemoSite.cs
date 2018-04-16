@@ -13,11 +13,11 @@ namespace FeaturesViewEngine.Tests
             _baseUrl = baseUrl;
         }
 
-        public async Task<string> Get(string path, object parameters = null)
+        public async Task<string> Get(string path, string displayMode = null)
         {
             return await _baseUrl
                 .AppendPathSegment(path)
-                .SetQueryParams(parameters)
+                .WithHeader("DisplayMode", displayMode)
                 .GetStringAsync();
         }
     }

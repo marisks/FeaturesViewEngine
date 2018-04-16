@@ -92,10 +92,13 @@
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Views\Default\Index.Custom.cshtml" />
     <Content Include="Views\Default\IndexWithPartialByName.cshtml" />
     <Content Include="Views\Default\IndexWithPartialBySpecificName.cshtml" />
     <Content Include="Views\Shared\Partial.cshtml" />
+    <Content Include="Views\Shared\Partial.Custom.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Layout.Custom.cshtml" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>

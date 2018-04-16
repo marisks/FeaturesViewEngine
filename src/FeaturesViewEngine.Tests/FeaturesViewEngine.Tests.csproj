@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default\CombinedTests.cs" />
+    <Compile Include="Default\DisplayModeTests.cs" />
     <Compile Include="Default\LayoutTests.cs" />
     <Compile Include="Default\PartialTests.cs" />
     <Compile Include="Default\ViewTests.cs" />

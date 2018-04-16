@@ -14,7 +14,7 @@ namespace FeaturesViewEngine.Demo
 
             DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Custom")
             {
-                ContextCondition = ctx => ctx.Request.Headers["Customer"] != null
+                ContextCondition = ctx => ctx.Request.Headers["DisplayMode"] == "Custom"
             });
         }
     }
