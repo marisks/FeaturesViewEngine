@@ -1,11 +1,15 @@
-﻿using System.Linq;
-
-namespace FeaturesViewEngine
+﻿namespace FeaturesViewEngine
 {
     public sealed class DefaultControllerFeaturesViewEngine : ControllerFeaturesViewEngine
     {
         public DefaultControllerFeaturesViewEngine()
         {
+            // clean out default formats
+            AreaMasterLocationFormats = new string[0];
+            AreaPartialViewLocationFormats = new string[0];
+            AreaViewLocationFormats = new string[0];
+            MasterLocationFormats = new string[0];
+
             var paths = new[]
             {
                 $"{FeaturePlaceholder}/{{0}}.cshtml",
@@ -13,15 +17,8 @@ namespace FeaturesViewEngine
                 $"{FeaturePlaceholder}/Views/{{1}}{{0}}.cshtml"
             };
 
-            ViewLocationFormats =
-                paths
-                    .Union(ViewLocationFormats)
-                    .ToArray();
-
-            PartialViewLocationFormats =
-                paths
-                    .Union(PartialViewLocationFormats)
-                    .ToArray();
+            ViewLocationFormats = paths;
+            PartialViewLocationFormats = paths;
         }
     }
 }
