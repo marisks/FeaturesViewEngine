@@ -7,38 +7,37 @@ namespace FeaturesViewEngine
 {
     /// <inheritdoc />
     /// <summary>
-    /// Razor view engine which resolves views by the controller namespace.
-    /// It replaces the placeholder '%feature%' with the namespace path to the controller excluding the namespace prefix to remove (by default assembly name).
+    ///     Razor view engine which resolves views by the controller namespace.
+    ///     It replaces the placeholder '%feature%' with the namespace path to the controller excluding the namespace prefix to
+    ///     remove (by default assembly name).
     /// </summary>
     public abstract class ControllerFeaturesViewEngine : RazorViewEngine
     {
         // format is ":FeatureViewCacheEntry:{cacheType}:{featurePath}:{viewName}:{controllerName}:"
         private const string CacheKeyFormat = ":FeatureViewCacheEntry:{0}:{1}:{2}:{3}:";
 
-        public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
+        public static string FeaturePlaceholder = "%feature%";
+
+        public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName,
+            string masterName, bool useCache)
         {
-            var (resolved, searchLocations) = ResolveViewPath(controllerContext, viewName, ViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved))
-            {
-                return new ViewEngineResult(searchLocations);
-            }
+            var (resolved, searchLocations) =
+                ResolveViewPath(controllerContext, viewName, ViewLocationFormats, useCache);
+            if (string.IsNullOrEmpty(resolved)) return new ViewEngineResult(searchLocations);
             return base.FindView(controllerContext, resolved, masterName, useCache);
         }
 
-        public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName,
+            bool useCache)
         {
-            var (resolved, searchLocations) = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved))
-            {
-                return new ViewEngineResult(searchLocations);
-            }
+            var (resolved, searchLocations) =
+                ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats, useCache);
+            if (string.IsNullOrEmpty(resolved)) return new ViewEngineResult(searchLocations);
             return base.FindPartialView(controllerContext, resolved, useCache);
         }
 
-        public static string FeaturePlaceholder = "%feature%";
-
         /// <summary>
-        /// Returns namespace prefix to remove before building view path. Default implementation returns assembly name.
+        ///     Returns namespace prefix to remove before building view path. Default implementation returns assembly name.
         /// </summary>
         public virtual string NamespacePrefixToRemove(ControllerContext controllerContext)
         {
@@ -66,9 +65,7 @@ namespace FeaturesViewEngine
 
             var (location, searchLocations) = ResolveViewPath(controllerContext, viewName, formats);
             if (!string.IsNullOrEmpty(location))
-            {
                 ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, location);
-            }
             return (location, searchLocations);
         }
 
@@ -78,7 +75,8 @@ namespace FeaturesViewEngine
                 GetType().AssemblyQualifiedName, featurePath, viewName, controllerName);
         }
 
-        private (string resolved, string[] searchLocations) ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        private (string resolved, string[] searchLocations) ResolveViewPath(ControllerContext controllerContext,
+            string viewName, IEnumerable<string> formats)
         {
             if (IsSpecificPath(viewName)) return (viewName, new string[0]);
             var featurePath = GetFeaturePath(controllerContext);
@@ -108,7 +106,8 @@ namespace FeaturesViewEngine
                 : string.Empty;
         }
 
-        protected virtual string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
+        protected virtual string FormatViewPath(string formatString, string featurePath, string viewName,
+            string controllerName)
         {
             var format = formatString.Replace(FeaturePlaceholder, featurePath);
             return string.Format(CultureInfo.InvariantCulture, format, viewName, controllerName);
