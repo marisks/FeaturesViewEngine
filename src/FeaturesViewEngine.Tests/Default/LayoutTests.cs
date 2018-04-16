@@ -7,7 +7,7 @@ namespace FeaturesViewEngine.Tests.Default
     {
         public LayoutTests()
         {
-            _sut = new DemoSite("http://localhost:5000");
+            _sut = new DemoSite();
         }
 
         private readonly DemoSite _sut;

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Configuration;
+using System.Threading.Tasks;
+using System.Web.Configuration;
 using Flurl;
 using Flurl.Http;
 
@@ -8,7 +10,12 @@ namespace FeaturesViewEngine.Tests
     {
         private readonly string _baseUrl;
 
-        public DemoSite(string baseUrl)
+        public DemoSite():this(WebConfigurationManager.AppSettings.Get("DemoSite:BaseUrl"))
+        {
+            
+        }
+
+        private DemoSite(string baseUrl)
         {
             _baseUrl = baseUrl;
         }

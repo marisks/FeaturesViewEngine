@@ -87,7 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Features\ControllerFeature\Index.cshtml" />
+    <Content Include="Features\ControllerFeature\Index.Custom.cshtml" />
     <Content Include="Features\ControllerFeature\Partial.cshtml" />
+    <Content Include="Features\ControllerFeature\Partial.Custom.cshtml" />
     <Content Include="Features\web.config" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />

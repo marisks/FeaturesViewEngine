@@ -72,6 +72,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerFeature\DisplayModeTests.cs" />
+    <Compile Include="ControllerFeature\PartialTests.cs" />
     <Compile Include="Default\CombinedTests.cs" />
     <Compile Include="Default\DisplayModeTests.cs" />
     <Compile Include="Default\LayoutTests.cs" />
@@ -79,10 +81,13 @@
     <Compile Include="Default\ViewTests.cs" />
     <Compile Include="DemoSite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ControllerFeature\Tests.cs" />
+    <Compile Include="ControllerFeature\ViewTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" />

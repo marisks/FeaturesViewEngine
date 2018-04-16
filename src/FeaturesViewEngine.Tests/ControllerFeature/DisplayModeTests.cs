@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Xunit;
 
-namespace FeaturesViewEngine.Tests.Default
+namespace FeaturesViewEngine.Tests.ControllerFeature
 {
     public class DisplayModeTests
     {
@@ -17,8 +17,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Index", "Custom");
-                    response.Should().Match("~/Views/Default/Index.Custom.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Index", "Custom");
+                    response.Should().Match("~/Features/ControllerFeature/Index.Custom.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -28,8 +28,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Index");
-                    response.Should().Match("~/Views/Default/Index.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Index");
+                    response.Should().Match("~/Features/ControllerFeature/Index.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -39,8 +39,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Partial", "Custom");
-                    response.Should().Match("~/Views/Shared/Partial.Custom.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Partial", "Custom");
+                    response.Should().Match("~/Features/ControllerFeature/Partial.Custom.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -50,8 +50,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Partial");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Partial");
+                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -61,10 +61,10 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/IndexWithLayoutWithPartialByName", "Custom");
+                    var response = await sut.Get("/ControllerFeature/IndexWithLayoutWithPartialByName", "Custom");
                     response.Should()
                         .MatchEquivalentOf(
-                            "*~/Views/Shared/_Layout.Custom.cshtml*~/Views/Default/IndexWithPartialByName.cshtml*~/Views/Shared/Partial.Custom.cshtml*");
+                            "*~/Views/Shared/_Layout.Custom.cshtml*~/Features/ControllerFeature/IndexWithPartialByName.cshtml*~/Features/ControllerFeature/Partial.Custom.cshtml*");
                 })
                 .Should().NotThrow();
         }

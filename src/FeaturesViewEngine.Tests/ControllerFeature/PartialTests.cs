@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Xunit;
 
-namespace FeaturesViewEngine.Tests.Default
+namespace FeaturesViewEngine.Tests.ControllerFeature
 {
     public class PartialTests
     {
@@ -17,8 +17,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Partial");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Partial");
+                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -28,8 +28,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/PartialByName");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    var response = await sut.Get("/ControllerFeature/PartialByName");
+                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }
@@ -39,8 +39,8 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/PartialBySpecificName");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    var response = await sut.Get("/ControllerFeature/PartialBySpecificName");
+                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
                 })
                 .Should().NotThrow();
         }
