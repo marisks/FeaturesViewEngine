@@ -103,6 +103,11 @@ namespace FeaturesViewEngine
             return Tuple.Create(resolved, searchLocations);
         }
 
+        /// <summary>
+        /// Method returns display modes that are valid for current request context
+        /// </summary>
+        /// <param name="controllerContext">Current controller context</param>
+        /// <returns>Valid display modes for current request ordered by their priority (e.g. ["Tablet", "Mobile", ""])</returns>
         private string[] GetAvailableDisplayModesForContext(ControllerContext controllerContext)
         {
             return DisplayModeProvider.GetAvailableDisplayModesForContext(controllerContext.HttpContext, controllerContext.DisplayMode)
