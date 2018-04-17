@@ -58,7 +58,7 @@ namespace FeaturesViewEngine
         {
             var featurePath = GetFeaturePath(controllerContext);
             var controllerName = GetControllerName(controllerContext);
-            var displayModes = GetAvailableDisplayModes(controllerContext);
+            var displayModes = GetAvailableDisplayModesForContext(controllerContext);
             var cacheKey = CreateCacheKey(featurePath, viewName, controllerName, displayModes);
 
             if (useCache)
@@ -94,7 +94,7 @@ namespace FeaturesViewEngine
             var featurePath = GetFeaturePath(controllerContext);
             if (string.IsNullOrEmpty(featurePath)) return Tuple.Create((string)null, new string[0]);
             var controllerName = GetControllerName(controllerContext);
-            var displayModes = GetAvailableDisplayModes(controllerContext);
+            var displayModes = GetAvailableDisplayModesForContext(controllerContext);
 
             var searchLocations = formats
                 .SelectMany(path => displayModes.Select(mode => FormatViewPath(path, featurePath, viewName, mode, controllerName)))
@@ -103,7 +103,7 @@ namespace FeaturesViewEngine
             return Tuple.Create(resolved, searchLocations);
         }
 
-        private string[] GetAvailableDisplayModes(ControllerContext controllerContext)
+        private string[] GetAvailableDisplayModesForContext(ControllerContext controllerContext)
         {
             return DisplayModeProvider.GetAvailableDisplayModesForContext(controllerContext.HttpContext, controllerContext.DisplayMode)
                 .Select(mode => mode.DisplayModeId)
