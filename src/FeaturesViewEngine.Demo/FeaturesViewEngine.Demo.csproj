@@ -83,24 +83,24 @@
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Features\ControllerFeature\ControllerFeatureController.cs" />
     <Compile Include="Global.asax.cs" />
+    <Compile Include="Models\ViewConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Features\ControllerFeature\Index.cshtml" />
-    <Content Include="Features\ControllerFeature\Index.Custom.cshtml" />
+    <Content Include="Features\ControllerFeature\Index.Mobile.cshtml" />
     <Content Include="Features\ControllerFeature\Partial.cshtml" />
-    <Content Include="Features\ControllerFeature\Partial.Custom.cshtml" />
+    <Content Include="Features\ControllerFeature\Partial.Mobile.cshtml" />
+    <Content Include="Features\ControllerFeature\_Layout.cshtml" />
     <Content Include="Features\web.config" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />
     <Content Include="Views\Default\Index.cshtml" />
-    <Content Include="Views\Default\Index.Custom.cshtml" />
-    <Content Include="Views\Default\IndexWithPartialByName.cshtml" />
-    <Content Include="Views\Default\IndexWithPartialBySpecificName.cshtml" />
+    <Content Include="Views\Default\Index.Mobile.cshtml" />
     <Content Include="Views\Shared\Partial.cshtml" />
-    <Content Include="Views\Shared\Partial.Custom.cshtml" />
+    <Content Include="Views\Shared\Partial.Mobile.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Shared\_Layout.Custom.cshtml" />
     <Content Include="Views\web.config" />
     <Content Include="Web.config" />
   </ItemGroup>

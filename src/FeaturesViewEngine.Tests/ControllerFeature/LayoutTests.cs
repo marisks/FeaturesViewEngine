@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace FeaturesViewEngine.Tests.Default
+namespace FeaturesViewEngine.Tests.ControllerFeature
 {
     public class LayoutTests
     {
@@ -18,8 +18,10 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/IndexWithLayoutBySpecificName");
-                    response.Should().MatchEquivalentOf("*~/Views/Shared/_Layout.cshtml*/Views/Default/Index.cshtml*");
+                    var response = await sut.Get("/ControllerFeature/IndexWithLayoutBySpecificName");
+                    response.Should()
+                        .MatchEquivalentOf(
+                            "*~/Features/ControllerFeature/_Layout.cshtml*/Features/ControllerFeature/Index.cshtml");
                 })
                 .Should().NotThrow();
         }

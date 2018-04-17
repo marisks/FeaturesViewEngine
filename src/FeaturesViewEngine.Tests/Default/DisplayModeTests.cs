@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FeaturesViewEngine.Tests.Helpers;
+using FluentAssertions;
 using Xunit;
 
 namespace FeaturesViewEngine.Tests.Default
@@ -13,34 +14,12 @@ namespace FeaturesViewEngine.Tests.Default
         private readonly DemoSite _sut;
 
         [Fact]
-        public void ExistingViewExistingDisplayMode_Success()
-        {
-            _sut.Awaiting(async sut =>
-                {
-                    var response = await sut.Get("/Default/Index", "Custom");
-                    response.Should().Match("~/Views/Default/Index.Custom.cshtml");
-                })
-                .Should().NotThrow();
-        }
-
-        [Fact]
-        public void ExistingViewNonExistingDisplayMode_Success()
-        {
-            _sut.Awaiting(async sut =>
-                {
-                    var response = await sut.Get("/Default/Index");
-                    response.Should().Match("~/Views/Default/Index.cshtml");
-                })
-                .Should().NotThrow();
-        }
-
-        [Fact]
         public void ExistingPartialExistingDisplayMode_Success()
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Partial", "Custom");
-                    response.Should().Match("~/Views/Shared/Partial.Custom.cshtml");
+                    var response = await sut.Get("/Default/Partial", "Mobile");
+                    response.Should().MatchEquivalentOf("*~/Views/Shared/Partial.Mobile.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -50,24 +29,32 @@ namespace FeaturesViewEngine.Tests.Default
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/Partial");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    var response = await sut.Get("/Default/Partial", "Tablet");
+                    response.Should().MatchEquivalentOf("*~/Views/Shared/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }
 
         [Fact]
-        public void ExistingViewExistingLayoutExistingPartialExistingDisplayMode_Success()
+        public void ExistingViewExistingDisplayMode_Success()
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/Default/IndexWithLayoutWithPartialByName", "Custom");
-                    response.Should()
-                        .MatchEquivalentOf(
-                            "*~/Views/Shared/_Layout.Custom.cshtml*~/Views/Default/IndexWithPartialByName.cshtml*~/Views/Shared/Partial.Custom.cshtml*");
+                    var response = await sut.Get("/Default/Index", "Mobile");
+                    response.Should().MatchEquivalentOf("*~/Views/Default/Index.Mobile.cshtml*");
                 })
                 .Should().NotThrow();
         }
 
+        [Fact]
+        public void ExistingViewNonExistingDisplayMode_Success()
+        {
+            _sut.Awaiting(async sut =>
+                {
+                    var response = await sut.Get("/Default/Index", "Tablet");
+                    response.Should().MatchEquivalentOf("*~/Views/Default/Index.cshtml*");
+                })
+                .Should().NotThrow();
+        }
     }
 }

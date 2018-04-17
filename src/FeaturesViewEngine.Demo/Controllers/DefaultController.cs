@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using FeaturesViewEngine.Demo.Models;
 
 namespace FeaturesViewEngine.Demo.Controllers
 {
@@ -23,30 +24,6 @@ namespace FeaturesViewEngine.Demo.Controllers
             return View("~/Views/Default/Index.cshtml");
         }
 
-        [Route(nameof(IndexWithLayoutByName))]
-        public ActionResult IndexWithLayoutByName()
-        {
-            return View("Index", "_Layout");
-        }
-
-        [Route(nameof(IndexWithLayoutBySpecificName))]
-        public ActionResult IndexWithLayoutBySpecificName()
-        {
-            return View("Index", "~/Views/Shared/_Layout.cshtml");
-        }
-
-        [Route(nameof(IndexWithLayoutWithPartialByName))]
-        public ActionResult IndexWithLayoutWithPartialByName()
-        {
-            return View("IndexWithPartialByName", "_Layout");
-        }
-
-        [Route(nameof(IndexWithLayoutWithPartialBySpecificName))]
-        public ActionResult IndexWithLayoutWithPartialBySpecificName()
-        {
-            return View("IndexWithPartialBySpecificName", "_Layout");
-        }
-
         [Route(nameof(Partial))]
         public ActionResult Partial()
         {
@@ -63,6 +40,24 @@ namespace FeaturesViewEngine.Demo.Controllers
         public ActionResult PartialBySpecificName()
         {
             return PartialView("~/Views/Shared/Partial.cshtml");
+        }
+
+        [Route(nameof(IndexWithPartialByName))]
+        public ActionResult IndexWithPartialByName()
+        {
+            return View("~/Views/Default/Index.cshtml", new ViewConfig {Partial = "Partial"});
+        }
+
+        [Route(nameof(IndexWithPartialBySpecificName))]
+        public ActionResult IndexWithPartialBySpecificName()
+        {
+            return View("~/Views/Default/Index.cshtml", new ViewConfig {Partial = "~/Views/Shared/Partial.cshtml"});
+        }
+
+        [Route(nameof(IndexWithLayoutBySpecificName))]
+        public ActionResult IndexWithLayoutBySpecificName()
+        {
+            return View("~/Views/Default/Index.cshtml", new ViewConfig {Layout = "~/Views/Shared/_Layout.cshtml"});
         }
     }
 }

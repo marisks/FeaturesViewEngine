@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FeaturesViewEngine.Tests.Helpers;
+using FluentAssertions;
 using Xunit;
 
 namespace FeaturesViewEngine.Tests.ControllerFeature
@@ -18,7 +19,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/Index");
-                    response.Should().Match("~/Features/ControllerFeature/Index.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Index.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -29,7 +30,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/IndexByName");
-                    response.Should().Match("~/Features/ControllerFeature/Index.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Index.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -40,7 +41,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/IndexBySpecificName");
-                    response.Should().Match("~/Features/ControllerFeature/Index.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Index.cshtml*");
                 })
                 .Should().NotThrow();
         }

@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using FeaturesViewEngine.Demo.Models;
 
 namespace FeaturesViewEngine.Demo.Features.ControllerFeature
 {
@@ -23,18 +24,6 @@ namespace FeaturesViewEngine.Demo.Features.ControllerFeature
             return View("~/Features/ControllerFeature/Index.cshtml");
         }
 
-        [Route(nameof(IndexWithLayoutByName))]
-        public ActionResult IndexWithLayoutByName()
-        {
-            return View("Index", "_Layout");
-        }
-
-        [Route(nameof(IndexWithLayoutBySpecificName))]
-        public ActionResult IndexWithLayoutBySpecificName()
-        {
-            return View("Index.cshtml", "~/Views/Shared/_Layout.cshtml");
-        }
-
         [Route(nameof(Partial))]
         public ActionResult Partial()
         {
@@ -51,6 +40,13 @@ namespace FeaturesViewEngine.Demo.Features.ControllerFeature
         public ActionResult PartialBySpecificName()
         {
             return PartialView("~/Features/ControllerFeature/Partial.cshtml");
+        }
+
+        [Route(nameof(IndexWithLayoutBySpecificName))]
+        public ActionResult IndexWithLayoutBySpecificName()
+        {
+            return View("~/Features/ControllerFeature/Index.cshtml",
+                new ViewConfig {Layout = "~/Features/ControllerFeature/_Layout.cshtml"});
         }
     }
 }

@@ -23,10 +23,7 @@ namespace FeaturesViewEngine
             string masterName, bool useCache)
         {
             var resolved = ResolveViewPath(controllerContext, viewName, ViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved.Item1))
-            {
-                return new ViewEngineResult(resolved.Item2);
-            }
+            if (string.IsNullOrEmpty(resolved.Item1)) return new ViewEngineResult(resolved.Item2);
             return base.FindView(controllerContext, resolved.Item1, masterName, useCache);
         }
 
@@ -34,10 +31,7 @@ namespace FeaturesViewEngine
             bool useCache)
         {
             var resolved = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved.Item1))
-            {
-                return new ViewEngineResult(resolved.Item2);
-            }
+            if (string.IsNullOrEmpty(resolved.Item1)) return new ViewEngineResult(resolved.Item2);
             return base.FindPartialView(controllerContext, resolved.Item1, useCache);
         }
 
@@ -70,9 +64,7 @@ namespace FeaturesViewEngine
 
             var resolved = ResolveViewPath(controllerContext, viewName, formats);
             if (!string.IsNullOrEmpty(resolved.Item1))
-            {
                 ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, resolved.Item1);
-            }
             return Tuple.Create(resolved.Item1, resolved.Item2);
         }
 
@@ -82,11 +74,12 @@ namespace FeaturesViewEngine
                 GetType().AssemblyQualifiedName, featurePath, viewName, controllerName);
         }
 
-        private Tuple<string, string[]> ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        private Tuple<string, string[]> ResolveViewPath(ControllerContext controllerContext, string viewName,
+            IEnumerable<string> formats)
         {
             if (IsSpecificPath(viewName)) return Tuple.Create(viewName, new string[0]);
             var featurePath = GetFeaturePath(controllerContext);
-            if (string.IsNullOrEmpty(featurePath)) return Tuple.Create((string)null, new string[0]);
+            if (string.IsNullOrEmpty(featurePath)) return Tuple.Create((string) null, new string[0]);
             var controllerName = GetControllerName(controllerContext);
             var searchLocations = formats
                 .Select(path => FormatViewPath(path, featurePath, viewName, controllerName))

@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FeaturesViewEngine.Tests.Helpers;
+using FluentAssertions;
 using Xunit;
 
 namespace FeaturesViewEngine.Tests.ControllerFeature
@@ -18,7 +19,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/Partial");
-                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -29,7 +30,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/PartialByName");
-                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -40,7 +41,7 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/ControllerFeature/PartialBySpecificName");
-                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }

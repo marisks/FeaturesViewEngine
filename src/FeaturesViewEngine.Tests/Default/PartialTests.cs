@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FeaturesViewEngine.Tests.Helpers;
+using FluentAssertions;
 using Xunit;
 
 namespace FeaturesViewEngine.Tests.Default
@@ -29,7 +30,7 @@ namespace FeaturesViewEngine.Tests.Default
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/Default/PartialByName");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Views/Shared/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -40,7 +41,33 @@ namespace FeaturesViewEngine.Tests.Default
             _sut.Awaiting(async sut =>
                 {
                     var response = await sut.Get("/Default/PartialBySpecificName");
-                    response.Should().Match("~/Views/Shared/Partial.cshtml");
+                    response.Should().MatchEquivalentOf("*~/Views/Shared/Partial.cshtml*");
+                })
+                .Should().NotThrow();
+        }
+
+        [Fact]
+        public void ExistingViewExistingPartialByName_Success()
+        {
+            _sut.Awaiting(async sut =>
+                {
+                    var response = await sut.Get("/Default/IndexWithPartialByName");
+                    response.Should()
+                        .MatchEquivalentOf(
+                            "*~/Views/Default/Index.cshtml*~/Views/Shared/Partial.cshtml*");
+                })
+                .Should().NotThrow();
+        }
+
+        [Fact]
+        public void ExistingViewExistingPartialBySpecificName_Success()
+        {
+            _sut.Awaiting(async sut =>
+                {
+                    var response = await sut.Get("/Default/IndexWithPartialBySpecificName");
+                    response.Should()
+                        .MatchEquivalentOf(
+                            "*~/Views/Default/Index.cshtml*~/Views/Shared/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }

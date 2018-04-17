@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FeaturesViewEngine.Tests.Helpers;
+using FluentAssertions;
 using Xunit;
 
 namespace FeaturesViewEngine.Tests.ControllerFeature
@@ -13,34 +14,12 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
         private readonly DemoSite _sut;
 
         [Fact]
-        public void ExistingViewExistingDisplayMode_Success()
-        {
-            _sut.Awaiting(async sut =>
-                {
-                    var response = await sut.Get("/ControllerFeature/Index", "Custom");
-                    response.Should().Match("~/Features/ControllerFeature/Index.Custom.cshtml");
-                })
-                .Should().NotThrow();
-        }
-
-        [Fact]
-        public void ExistingViewNonExistingDisplayMode_Success()
-        {
-            _sut.Awaiting(async sut =>
-                {
-                    var response = await sut.Get("/ControllerFeature/Index");
-                    response.Should().Match("~/Features/ControllerFeature/Index.cshtml");
-                })
-                .Should().NotThrow();
-        }
-
-        [Fact]
         public void ExistingPartialExistingDisplayMode_Success()
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/ControllerFeature/Partial", "Custom");
-                    response.Should().Match("~/Features/ControllerFeature/Partial.Custom.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Partial", "Mobile");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Partial.Mobile.cshtml*");
                 })
                 .Should().NotThrow();
         }
@@ -50,24 +29,32 @@ namespace FeaturesViewEngine.Tests.ControllerFeature
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/ControllerFeature/Partial");
-                    response.Should().Match("~/Features/ControllerFeature/Partial.cshtml");
+                    var response = await sut.Get("/ControllerFeature/Partial", "Tablet");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Partial.cshtml*");
                 })
                 .Should().NotThrow();
         }
 
         [Fact]
-        public void ExistingViewExistingLayoutExistingPartialExistingDisplayMode_Success()
+        public void ExistingViewExistingDisplayMode_Success()
         {
             _sut.Awaiting(async sut =>
                 {
-                    var response = await sut.Get("/ControllerFeature/IndexWithLayoutWithPartialByName", "Custom");
-                    response.Should()
-                        .MatchEquivalentOf(
-                            "*~/Views/Shared/_Layout.Custom.cshtml*~/Features/ControllerFeature/IndexWithPartialByName.cshtml*~/Features/ControllerFeature/Partial.Custom.cshtml*");
+                    var response = await sut.Get("/ControllerFeature/Index", "Mobile");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Index.Mobile.cshtml*");
                 })
                 .Should().NotThrow();
         }
 
+        [Fact]
+        public void ExistingViewNonExistingDisplayMode_Success()
+        {
+            _sut.Awaiting(async sut =>
+                {
+                    var response = await sut.Get("/ControllerFeature/Index", "Tablet");
+                    response.Should().MatchEquivalentOf("*~/Features/ControllerFeature/Index.cshtml*");
+                })
+                .Should().NotThrow();
+        }
     }
 }

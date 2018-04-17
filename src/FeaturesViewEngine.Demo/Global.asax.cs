@@ -11,10 +11,16 @@ namespace FeaturesViewEngine.Demo
         {
             RouteTable.Routes.MapMvcAttributeRoutes();
 
+            ViewEngines.Engines.Insert(0, new DefaultControllerFeaturesViewEngine());
 
-            DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Custom")
+            DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Tablet")
             {
-                ContextCondition = ctx => ctx.Request.Headers["DisplayMode"] == "Custom"
+                ContextCondition = ctx => ctx.Request.Headers["DisplayMode"] == "Tablet"
+            });
+
+            DisplayModeProvider.Instance.Modes.Insert(0, new DefaultDisplayMode("Mobile")
+            {
+                ContextCondition = ctx => ctx.Request.Headers["DisplayMode"] == "Mobile"
             });
         }
     }
