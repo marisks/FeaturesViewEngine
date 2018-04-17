@@ -1,0 +1,25 @@
+@using System.Web.Mvc.Html
+@using FeaturesViewEngine.Demo.Models
+@using HtmlHelper = System.Web.Mvc.HtmlHelper
+
+@helper RenderView(WebPageBase view, HtmlHelper html, ViewConfig model)
+{
+    if (model != null && model.Layout != null)
+    {
+        view.Layout = model.Layout;
+    }
+    @view.VirtualPath
+    if (model != null && model.Partial != null)
+    {
+        html.RenderPartial(model.Partial);
+    }
+}
+
+@helper RenderPartial(WebPageBase view)
+{ @view.VirtualPath }
+
+@helper RenderLayout(WebPageBase view)
+{
+    @view.VirtualPath
+    @view.RenderBody()
+}
