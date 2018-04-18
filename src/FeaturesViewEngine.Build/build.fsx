@@ -7,9 +7,9 @@ let authors = [company]
 let projectName = "FeaturesViewEngine"
 let projectDescription = "View Engine which enables feature folder support for MVC (prior .NET Core)."
 let projectSummary = projectDescription
-let releaseNotes = "Removed value tuple dependency."
+let releaseNotes = "Added support for display modes."
 let copyright = "Copyright © Maris Krivtezs 2018"
-let assemblyVersion = "1.1.4"
+let assemblyVersion = "1.1.5"
 
 let solutionPath = "../../FeaturesViewEngine.sln"
 let buildDir = "../FeaturesViewEngine/bin"
