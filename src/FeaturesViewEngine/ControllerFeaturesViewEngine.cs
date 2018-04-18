@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace FeaturesViewEngine
 {
@@ -14,7 +15,7 @@ namespace FeaturesViewEngine
     public abstract class ControllerFeaturesViewEngine : RazorViewEngine
     {
         // format is ":FeatureViewCacheEntry:{cacheType}:{featurePath}:{viewName}:{controllerName}:"
-        private const string CacheKeyFormat = ":FeatureViewCacheEntry:{0}:{1}:{2}:{3}:";
+        private const string CacheKeyFormat = ":FeatureViewCacheEntry:{0}:{1}:{2}:{3}:{4}:";
 
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
@@ -57,7 +58,8 @@ namespace FeaturesViewEngine
         {
             var featurePath = GetFeaturePath(controllerContext);
             var controllerName = GetControllerName(controllerContext);
-            var cacheKey = CreateCacheKey(featurePath, viewName, controllerName);
+            var displayModes = GetAvailableDisplayModesForContext(controllerContext);
+            var cacheKey = CreateCacheKey(featurePath, viewName, controllerName, displayModes);
 
             if (useCache)
             {
@@ -73,10 +75,17 @@ namespace FeaturesViewEngine
             return Tuple.Create(resolved.Item1, resolved.Item2);
         }
 
-        private string CreateCacheKey(string featurePath, string viewName, string controllerName)
+        private string CreateCacheKey(string featurePath, string viewName, string controllerName, string[] displayModes)
         {
-            return string.Format(CultureInfo.InvariantCulture, CacheKeyFormat,
-                GetType().AssemblyQualifiedName, featurePath, viewName, controllerName);
+            return string.Format(
+                CultureInfo.InvariantCulture,
+                CacheKeyFormat,
+                GetType().AssemblyQualifiedName,
+                featurePath,
+                viewName,
+                controllerName,
+                string.Join(",", displayModes)
+            );
         }
 
         private Tuple<string, string[]> ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
@@ -85,11 +94,25 @@ namespace FeaturesViewEngine
             var featurePath = GetFeaturePath(controllerContext);
             if (string.IsNullOrEmpty(featurePath)) return Tuple.Create((string)null, new string[0]);
             var controllerName = GetControllerName(controllerContext);
+            var displayModes = GetAvailableDisplayModesForContext(controllerContext);
+
             var searchLocations = formats
-                .Select(path => FormatViewPath(path, featurePath, viewName, controllerName))
+                .SelectMany(path => displayModes.Select(mode => FormatViewPath(path, featurePath, viewName, mode, controllerName)))
                 .ToArray();
             var resolved = searchLocations.FirstOrDefault(viewPath => FileExists(controllerContext, viewPath));
             return Tuple.Create(resolved, searchLocations);
+        }
+
+        /// <summary>
+        /// Method returns display modes that are valid for current request context
+        /// </summary>
+        /// <param name="controllerContext">Current controller context</param>
+        /// <returns>Valid display modes for current request ordered by their priority (e.g. ["Tablet", "Mobile", ""])</returns>
+        private string[] GetAvailableDisplayModesForContext(ControllerContext controllerContext)
+        {
+            return DisplayModeProvider.GetAvailableDisplayModesForContext(controllerContext.HttpContext, controllerContext.DisplayMode)
+                .Select(mode => mode.DisplayModeId)
+                .ToArray();
         }
 
         private static string GetControllerName(ControllerContext controllerContext)
@@ -109,9 +132,15 @@ namespace FeaturesViewEngine
                 : string.Empty;
         }
 
-        protected virtual string FormatViewPath(string formatString, string featurePath, string viewName, string controllerName)
+        protected virtual string FormatViewPath(string formatString, string featurePath, string viewName, string displayMode, string controllerName)
         {
             var format = formatString.Replace(FeaturePlaceholder, featurePath);
+
+            if (!string.IsNullOrEmpty(displayMode))
+            {
+                viewName = $"{viewName}.{displayMode}";
+            }
+
             return string.Format(CultureInfo.InvariantCulture, format, viewName, controllerName);
         }
 
