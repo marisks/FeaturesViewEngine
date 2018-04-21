@@ -3,22 +3,22 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyProductAttribute("FeaturesViewEngine")]
-[assembly: AssemblyVersionAttribute("1.1.5")]
-[assembly: AssemblyFileVersionAttribute("1.1.5")]
+[assembly: AssemblyVersionAttribute("1.1.6")]
+[assembly: AssemblyFileVersionAttribute("1.1.6")]
 [assembly: ComVisibleAttribute(false)]
 [assembly: AssemblyCopyrightAttribute("Copyright © Maris Krivtezs 2018")]
 [assembly: AssemblyCompanyAttribute("Maris Krivtezs")]
-[assembly: AssemblyDescriptionAttribute("View Engine which enables feature folder support for MVC (prior .NET Core).")]
+[assembly: AssemblyDescriptionAttribute("View Engine which enables feature folder support for MVC 5.")]
 [assembly: AssemblyTitleAttribute("FeaturesViewEngine")]
 namespace System {
     internal static class AssemblyVersionInformation {
         internal const System.String AssemblyProduct = "FeaturesViewEngine";
-        internal const System.String AssemblyVersion = "1.1.5";
-        internal const System.String AssemblyFileVersion = "1.1.5";
+        internal const System.String AssemblyVersion = "1.1.6";
+        internal const System.String AssemblyFileVersion = "1.1.6";
         internal const System.Boolean ComVisible = false;
         internal const System.String AssemblyCopyright = "Copyright © Maris Krivtezs 2018";
         internal const System.String AssemblyCompany = "Maris Krivtezs";
-        internal const System.String AssemblyDescription = "View Engine which enables feature folder support for MVC (prior .NET Core).";
+        internal const System.String AssemblyDescription = "View Engine which enables feature folder support for MVC 5.";
         internal const System.String AssemblyTitle = "FeaturesViewEngine";
     }
 }
