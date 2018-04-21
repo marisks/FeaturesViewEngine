@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.WebPages;
 
 namespace FeaturesViewEngine
 {
@@ -17,27 +16,27 @@ namespace FeaturesViewEngine
         // format is ":FeatureViewCacheEntry:{cacheType}:{featurePath}:{viewName}:{controllerName}:"
         private const string CacheKeyFormat = ":FeatureViewCacheEntry:{0}:{1}:{2}:{3}:{4}:";
 
+        public static string FeaturePlaceholder = "%feature%";
+
         public override ViewEngineResult FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
             var resolved = ResolveViewPath(controllerContext, viewName, ViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved.Item1))
+            if (string.IsNullOrEmpty(resolved.Path))
             {
-                return new ViewEngineResult(resolved.Item2);
+                return new ViewEngineResult(resolved.SearchLocations);
             }
-            return base.FindView(controllerContext, resolved.Item1, masterName, useCache);
+            return base.FindView(controllerContext, resolved.Path, masterName, useCache);
         }
 
         public override ViewEngineResult FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
             var resolved = ResolveViewPath(controllerContext, partialViewName, PartialViewLocationFormats, useCache);
-            if (string.IsNullOrEmpty(resolved.Item1))
+            if (string.IsNullOrEmpty(resolved.Path))
             {
-                return new ViewEngineResult(resolved.Item2);
+                return new ViewEngineResult(resolved.SearchLocations);
             }
-            return base.FindPartialView(controllerContext, resolved.Item1, useCache);
+            return base.FindPartialView(controllerContext, resolved.Path, useCache);
         }
-
-        public static string FeaturePlaceholder = "%feature%";
 
         /// <summary>
         /// Returns namespace prefix to remove before building view path. Default implementation returns assembly name.
@@ -50,7 +49,7 @@ namespace FeaturesViewEngine
             return fullNamespace != null ? controllerType.Assembly.GetName().Name : string.Empty;
         }
 
-        private Tuple<string, string[]> ResolveViewPath(
+        private ViewPathResult ResolveViewPath(
             ControllerContext controllerContext,
             string viewName,
             IEnumerable<string> formats,
@@ -64,15 +63,14 @@ namespace FeaturesViewEngine
             if (useCache)
             {
                 var cachedLocation = ViewLocationCache.GetViewLocation(controllerContext.HttpContext, cacheKey);
-                if (cachedLocation != null) return Tuple.Create(cachedLocation, new string[0]);
+                if (cachedLocation != null) return ViewPathResult.Create(cachedLocation);
             }
 
             var resolved = ResolveViewPath(controllerContext, viewName, formats);
-            if (!string.IsNullOrEmpty(resolved.Item1))
-            {
-                ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, resolved.Item1);
-            }
-            return Tuple.Create(resolved.Item1, resolved.Item2);
+
+            ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, resolved.Path);
+
+            return resolved;
         }
 
         private string CreateCacheKey(string featurePath, string viewName, string controllerName, string[] displayModes)
@@ -88,19 +86,22 @@ namespace FeaturesViewEngine
             );
         }
 
-        private Tuple<string, string[]> ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
+        private ViewPathResult ResolveViewPath(ControllerContext controllerContext, string viewName, IEnumerable<string> formats)
         {
-            if (IsSpecificPath(viewName)) return Tuple.Create(viewName, new string[0]);
+            if (IsSpecificPath(viewName)) return ViewPathResult.Create(viewName);
+
             var featurePath = GetFeaturePath(controllerContext);
-            if (string.IsNullOrEmpty(featurePath)) return Tuple.Create((string)null, new string[0]);
+            if (string.IsNullOrEmpty(featurePath)) return ViewPathResult.Empty;
+
             var controllerName = GetControllerName(controllerContext);
             var displayModes = GetAvailableDisplayModesForContext(controllerContext);
 
             var searchLocations = formats
                 .SelectMany(path => displayModes.Select(mode => FormatViewPath(path, featurePath, viewName, mode, controllerName)))
                 .ToArray();
-            var resolved = searchLocations.FirstOrDefault(viewPath => FileExists(controllerContext, viewPath));
-            return Tuple.Create(resolved, searchLocations);
+            var resolved = searchLocations.FirstOrDefault(viewPath => FileExists(controllerContext, viewPath)) ?? string.Empty;
+
+            return ViewPathResult.Create(resolved, searchLocations);
         }
 
         /// <summary>
@@ -148,6 +149,30 @@ namespace FeaturesViewEngine
         {
             var c = name[0];
             return c == '~' || c == '/';
+        }
+
+        private class ViewPathResult
+        {
+            public string Path { get; }
+            public string[] SearchLocations { get; }
+
+            public static readonly ViewPathResult Empty = new ViewPathResult(string.Empty, new string[0]);
+
+            private ViewPathResult(string path, string[] searchLocations)
+            {
+                Path = path ?? throw new ArgumentNullException(nameof(path));
+                SearchLocations = searchLocations ?? throw new ArgumentNullException(nameof(searchLocations));
+            }
+
+            public static ViewPathResult Create(string path)
+            {
+                return new ViewPathResult(path, new string[0]);
+            }
+
+            public static ViewPathResult Create(string path, string[] searchLocations)
+            {
+                return new ViewPathResult(path, searchLocations);
+            }
         }
     }
 }
