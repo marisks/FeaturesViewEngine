@@ -55,6 +55,8 @@ namespace FeaturesViewEngine
             IEnumerable<string> formats,
             bool useCache)
         {
+            if (controllerContext.Controller == null) return ViewPathResult.Empty;
+
             var featurePath = GetFeaturePath(controllerContext);
             var controllerName = GetControllerName(controllerContext);
             var displayModes = GetAvailableDisplayModesForContext(controllerContext);
