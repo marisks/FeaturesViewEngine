@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>@description@</description>
     <releaseNotes>@releaseNotes@</releaseNotes>
-    <copyright>Copyright Maris Krivtezs 2017</copyright>
+    <copyright>Copyright Maris Krivtezs 2018</copyright>
     <tags>ASP.NET MVC</tags>
     @dependencies@
     @references@
