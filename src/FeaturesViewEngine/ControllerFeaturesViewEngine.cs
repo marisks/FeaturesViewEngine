@@ -57,26 +57,37 @@ namespace FeaturesViewEngine
         {
             if (controllerContext.Controller == null) return ViewPathResult.Empty;
 
-            var featurePath = GetFeaturePath(controllerContext);
-            var controllerName = GetControllerName(controllerContext);
-            var displayModes = GetAvailableDisplayModesForContext(controllerContext);
-            var cacheKey = CreateCacheKey(featurePath, viewName, controllerName, displayModes);
+            return ResolveUsingCache(
+                        useCache,
+                        controllerContext,
+                        viewName,
+                        () => ResolveViewPath(controllerContext, viewName, formats));
+        }
 
-            if (useCache)
-            {
-                var cachedLocation = ViewLocationCache.GetViewLocation(controllerContext.HttpContext, cacheKey);
-                if (cachedLocation != null) return ViewPathResult.Create(cachedLocation);
-            }
+        private ViewPathResult ResolveUsingCache(
+            bool useCache,
+            ControllerContext context,
+            string viewName,
+            Func<ViewPathResult> resolve)
+        {
+            if (!useCache) return resolve();
 
-            var resolved = ResolveViewPath(controllerContext, viewName, formats);
+            var cacheKey = CreateCacheKey(context, viewName);
 
-            ViewLocationCache.InsertViewLocation(controllerContext.HttpContext, cacheKey, resolved.Path);
+            var cachedLocation = ViewLocationCache.GetViewLocation(context.HttpContext, cacheKey);
+            if (cachedLocation != null) return ViewPathResult.Create(cachedLocation);
 
+            var resolved = resolve();
+            ViewLocationCache.InsertViewLocation(context.HttpContext, cacheKey, resolved.Path);
             return resolved;
         }
 
-        private string CreateCacheKey(string featurePath, string viewName, string controllerName, string[] displayModes)
+        private string CreateCacheKey(ControllerContext context, string viewName)
         {
+            var featurePath = GetFeaturePath(context);
+            var controllerName = GetControllerName(context);
+            var displayModes = GetAvailableDisplayModesForContext(context);
+
             return string.Format(
                 CultureInfo.InvariantCulture,
                 CacheKeyFormat,
